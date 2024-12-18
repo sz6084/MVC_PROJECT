@@ -36,15 +36,18 @@ def plot_3d_model(volume):
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111, projection='3d')
     
-    # Visualize the 3D volume with non-circular parts transparent
+    # Visualize the 3D volume with a gradient color for each slice
     for i in range(volume.shape[0]):
         z = np.ones_like(x) * i  # Each slice at a different z-level
         
         # Mask NaN values to make them transparent
         slice_data = volume[i]
         mask = ~np.isnan(slice_data)
+        
+        # Apply a color gradient based on the slice index
+        gradient_color = plt.cm.plasma(i / volume.shape[0])  # Gradient from 0 to 1 across slices
         facecolors = np.zeros(slice_data.shape + (4,))  # RGBA colors
-        facecolors[..., :3] = plt.cm.viridis(slice_data / np.nanmax(slice_data))[:, :, :3]
+        facecolors[..., :3] = gradient_color[:3]  # Apply color gradient to RGB
         facecolors[..., 3] = mask.astype(float) * 0.8  # Transparency for NaN
         
         ax.plot_surface(
@@ -54,7 +57,7 @@ def plot_3d_model(volume):
     ax.set_title('3D Reconstruction of 2D Slices of Gradually Increasing Circles')
     plt.show()
 
-# Step 4: Calculate Surface Area (using gradient of the scalar field)
+# Step 3: Calculate Surface Area (using gradient of the scalar field)
 def calculate_surface_area(volume):
     # Calculate the gradient of the 3D volume
     gradient = np.gradient(np.nan_to_num(volume))
@@ -68,9 +71,9 @@ if __name__ == '__main__':
     # Generate 2D slices (e.g., simulate MRI/CT scan slices)
     volume = generate_2d_slices()
     
-    # Step 3: Calculate surface area
+    # Step 2: Calculate surface area
     surface_area = calculate_surface_area(volume)
     print(f"Calculated Surface Area: {surface_area} units^2")
 
-    # Step 4: Visualize the reconstructed 3D model
+    # Step 3: Visualize the reconstructed 3D model
     plot_3d_model(volume)
