@@ -38,11 +38,7 @@ def plot_3d_model(volume):
     ax.set_title('3D Reconstruction of 2D Slices')
     plt.show()
 
-# Step 3: Calculate Volume (using integration on 3D grid)
-def calculate_volume(volume, dx=1, dy=1, dz=1):
-    return np.sum(volume) * dx * dy * dz
-
-# Step 4: Calculate Surface Area (using gradient of the scalar field)
+# Step 3: Calculate Surface Area (using gradient of the scalar field)
 def calculate_surface_area(volume):
     # Calculate the gradient of the 3D volume
     gradient = np.gradient(volume)
@@ -56,13 +52,9 @@ if __name__ == '__main__':
     # Generate 2D slices (e.g., simulate MRI/CT scan slices)
     volume = generate_2d_slices()
     
-    # Step 2: Calculate volume
-    volume_value = calculate_volume(volume)
-    print(f"Calculated Volume: {volume_value} cubic units")
-    
-    # Step 3: Calculate surface area
+    # Step 2: Calculate surface area
     surface_area = calculate_surface_area(volume)
     print(f"Calculated Surface Area: {surface_area} units^2")
 
-    # Step 4: Visualize the reconstructed 3D model
+    # Step 3: Visualize the reconstructed 3D model
     plot_3d_model(volume)
